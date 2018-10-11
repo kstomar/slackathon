@@ -1,7 +1,10 @@
 module Slackathon
   class WebhooksController < ApplicationController
     before_action :verify_token
-
+    if Rails.application.config.action_controller.default_protect_from_forgery
+      skip_before_action :verify_authenticity_token
+    end
+    
     def command
       command = payload[:command][1..-1]
       klass = "#{command}_command".classify.constantize
